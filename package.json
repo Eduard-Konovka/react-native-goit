@@ -1,6 +1,7 @@
 {
   "name": "react-native-goit",
   "version": "1.0.0",
+  "description": "Learning React Native",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
@@ -8,6 +9,16 @@
     "ios": "expo start --ios",
     "web": "expo start --web"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Eduard-Konovka/react-native-goit.git"
+  },
+  "author": "Eduard Konovka <ed098ua@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Eduard-Konovka/react-native-goit/issues"
+  },
+  "homepage": "https://github.com/Eduard-Konovka/react-native-goit#readme",
   "dependencies": {
     "expo": "~46.0.16",
     "expo-status-bar": "~1.4.0",
