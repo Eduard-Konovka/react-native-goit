@@ -1,10 +1,28 @@
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Switch, Text, View } from 'react-native';
 
 export default function App() {
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [swichResult, setSwichResult] = useState('Disabled switch');
+
+  const toggleSwitch = () => {
+    setIsEnabled(previousState => !previousState);
+    setSwichResult(isEnabled ? 'Disabled switch' : 'Enabled switch');
+  };
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <Text>{swichResult}</Text>
+
+      <Switch
+        trackColor={{ false: '#767577', true: '#81b0ff' }}
+        thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+        ios_backgroundColor="#3e3e3e"
+        onValueChange={toggleSwitch}
+        value={isEnabled}
+      />
+
       <StatusBar style="auto" />
     </View>
   );
