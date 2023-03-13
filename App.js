@@ -12,6 +12,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  useWindowDimensions,
 } from 'react-native';
 
 export default function App() {
@@ -19,6 +20,8 @@ export default function App() {
   const [swichResult, setSwichResult] = useState('Disabled switch');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+
+  const { height, width, scale, fontScale } = useWindowDimensions();
 
   const toggleSwitch = () => {
     setIsEnabled(previousState => !previousState);
@@ -65,6 +68,11 @@ export default function App() {
 
           <Button title={'Login'} style={styles.input} onPress={onLogin} />
         </KeyboardAvoidingView>
+
+        <Text>Window height: {height}</Text>
+        <Text>Window width: {width}</Text>
+        <Text>Font scale: {fontScale}</Text>
+        <Text>Pixel ratio: {scale}</Text>
 
         <StatusBar style="auto" />
       </View>
