@@ -1,0 +1,18 @@
+export { CONTRY, LANGUAGE } from './radioSettings';
+export {
+  ALERT,
+  BUTTON,
+  PRIVACY_POLICY,
+  APP_SET_UP,
+  REGISTRATION,
+  LOGIN,
+  PROFILE,
+  NOTIFICATIONS,
+  CONTACTS,
+  MENU,
+  EDIT_PROFILE,
+  EDIT_CONTACTS,
+  PHOTO_LIBRARY,
+  CAMERA,
+  BLE,
+} from './language';

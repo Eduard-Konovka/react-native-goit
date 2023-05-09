@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1010133054620",
+    "project_id": "freja-db",
+    "storage_bucket": "freja-db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1010133054620:android:07d04ee98f05a9bc4fa959",
+        "android_client_info": {
+          "package_name": "freja.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1010133054620-g862s2h72o7514v3tr4sg1i1u2qhf59q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmtrhyCzBENpQ0HKKruiQ6JCmcKqwQ2Xc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1010133054620-g862s2h72o7514v3tr4sg1i1u2qhf59q.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1010133054620-ih36jr3sunuhndh3aslntooofmsmol7l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "FrejaTech"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

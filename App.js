@@ -1,98 +1,143 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { LogBox, View, ImageBackground, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
-import {
-  Alert,
-  Button,
-  StyleSheet,
-  Switch,
-  Text,
-  TextInput,
-  View,
-  TouchableWithoutFeedback,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  useWindowDimensions,
-} from 'react-native';
+import * as Font from 'expo-font';
+import { Provider } from 'react-redux';
+import { store } from 'redux';
+import { CountryProvider, LanguageProvider, ServicesProvider } from 'context';
+import { languageWrapper } from 'middlewares';
+import { ALERT } from 'constants';
+import { StartRouter, MainRouter } from 'routers';
+import { Loader } from 'components';
+import { globalStyles } from 'styles/style';
+
+LogBox.ignoreLogs(['new NativeEventEmitter()']);
 
 export default function App() {
-  const [isEnabled, setIsEnabled] = useState(false);
-  const [swichResult, setSwichResult] = useState('Disabled switch');
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
+  const [fontIsReady, setFontIsReady] = useState(false);
+  const [firstDownloadIsReady, setFirstDownloadIsReady] = useState(false);
+  const [isFirstDownload, setIsFirstDownload] = useState(false);
+  const [country, setCountry] = useState(null);
+  const [language, setLanguage] = useState(null);
+  const [services, setServices] = useState({});
 
-  const { height, width, scale, fontScale } = useWindowDimensions();
+  const languageDeterminer = obj => languageWrapper(language, obj);
 
-  const toggleSwitch = () => {
-    setIsEnabled(previousState => !previousState);
-    setSwichResult(isEnabled ? 'Disabled switch' : 'Enabled switch');
-  };
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await Font.loadAsync({
+          regular400: require('assets/fonts/Montserrat-Regular.ttf'),
+          medium500: require('assets/fonts/Montserrat-Medium.ttf'),
+          semiBold600: require('assets/fonts/Montserrat-SemiBold.ttf'),
+        });
+      } catch (error) {
+        Alert.alert(languageDeterminer(ALERT.errorFont), error, [
+          { text: 'Ok' },
+        ]);
+      } finally {
+        setFontIsReady(true);
+      }
+    }
 
-  const nameHandler = text => setName(text);
-  const passwordHandler = text => setPassword(text);
+    prepare();
+  }, []);
 
-  const onLogin = () => {
-    Alert.alert('Credentials', `${name} + ${password}`);
-  };
+  useEffect(() => {
+    async function getFirstDownload() {
+      try {
+        const value = await AsyncStorage.getItem('isFirstDownload');
+        setIsFirstDownload(value === 'false' ? false : true);
+      } catch (error) {
+        Alert.alert(languageDeterminer(ALERT.errorGetFirstDownload), error, [
+          { text: 'Ok' },
+        ]);
+      } finally {
+        setFirstDownloadIsReady(true);
+      }
+    }
+
+    getFirstDownload();
+  }, []);
+
+  useEffect(() => {
+    async function getLanguage() {
+      try {
+        const language = await AsyncStorage.getItem('language');
+        !isFirstDownload && setLanguage(language != null ? language : null);
+      } catch (error) {
+        Alert.alert(languageDeterminer(ALERT.errorGetLanguage), error, [
+          { text: 'Ok' },
+        ]);
+      }
+    }
+
+    getLanguage();
+  }, [isFirstDownload]);
+
+  async function storeFirstDownload(value) {
+    try {
+      await AsyncStorage.setItem('isFirstDownload', value.toString());
+    } catch (error) {
+      Alert.alert(languageDeterminer(ALERT.errorStoreFirstDownload), error, [
+        { text: 'Ok' },
+      ]);
+    }
+  }
+
+  async function storeLanguage(value) {
+    try {
+      await AsyncStorage.setItem('language', value);
+    } catch (error) {
+      Alert.alert(languageDeterminer(ALERT.errorStoreLanguage), error, [
+        { text: 'Ok' },
+      ]);
+    }
+  }
+
+  function handleLanguage(language) {
+    setLanguage(language);
+    storeLanguage(language);
+  }
+
+  function handleFinish() {
+    setIsFirstDownload(false);
+    storeFirstDownload(false);
+  }
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
-        <Text>{swichResult}</Text>
-
-        <Switch
-          trackColor={{ false: '#767577', true: '#81b0ff' }}
-          thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleSwitch}
-          value={isEnabled}
-        />
-
-        <KeyboardAvoidingView
-          behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+    <View style={globalStyles.main}>
+      {fontIsReady && firstDownloadIsReady ? (
+        <Provider store={store}>
+          <CountryProvider value={country}>
+            <LanguageProvider value={language}>
+              <ServicesProvider value={services}>
+                {isFirstDownload ? (
+                  <StartRouter
+                    setCountry={setCountry}
+                    setLanguage={handleLanguage}
+                    setServices={setServices}
+                    onFinish={handleFinish}
+                  />
+                ) : (
+                  <MainRouter />
+                )}
+              </ServicesProvider>
+            </LanguageProvider>
+          </CountryProvider>
+        </Provider>
+      ) : (
+        <ImageBackground
+          source={require('assets/background/1.jpg')}
+          resizeMode="cover"
+          style={globalStyles.bgImage}
         >
-          <TextInput
-            value={name}
-            onChangeText={nameHandler}
-            placeholder="Username"
-            style={styles.input}
-          />
+          <Loader />
+        </ImageBackground>
+      )}
 
-          <TextInput
-            value={password}
-            onChangeText={passwordHandler}
-            placeholder="Password"
-            secureTextEntry={true}
-            style={styles.input}
-          />
-
-          <Button title={'Login'} style={styles.input} onPress={onLogin} />
-        </KeyboardAvoidingView>
-
-        <Text>Window height: {height}</Text>
-        <Text>Window width: {width}</Text>
-        <Text>Font scale: {fontScale}</Text>
-        <Text>Pixel ratio: {scale}</Text>
-
-        <StatusBar style="auto" />
-      </View>
-    </TouchableWithoutFeedback>
+      <StatusBar style="auto" />
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#ecf0f1',
-  },
-  input: {
-    width: 200,
-    height: 44,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: 'black',
-    marginBottom: 10,
-  },
-});
