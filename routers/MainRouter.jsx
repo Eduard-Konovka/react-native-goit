@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
-import { authStateChangeUser } from 'redux';
+import { authStateChangeUser } from 'state';
 import { useRoute } from 'hooks';
 
 export default function MainRouter() {

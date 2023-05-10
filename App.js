@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 import * as Font from 'expo-font';
 import { Provider } from 'react-redux';
-import { store } from 'redux';
+import { store } from 'state';
 import { CountryProvider, LanguageProvider, ServicesProvider } from 'context';
 import { languageWrapper } from 'middlewares';
 import { ALERT } from 'constants';

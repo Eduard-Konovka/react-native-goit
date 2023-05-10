@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Image, Pressable, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useLanguage } from 'context';
-import { authSignOutUser } from 'redux';
+import { authSignOutUser } from 'state';
 import { languageWrapper } from 'middlewares';
 import { BluetoothLowEnergy } from 'components';
 import { EditProfile, EditContacts, EditShortGuide } from './nested';

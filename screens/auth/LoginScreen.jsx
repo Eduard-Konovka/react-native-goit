@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useDispatch } from 'react-redux';
-import { authSignInUser } from 'redux';
+import { authSignInUser } from 'state';
 import { useLanguage } from 'context';
 import { languageWrapper } from 'middlewares';
 import { Button } from 'components';
